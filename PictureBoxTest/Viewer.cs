@@ -29,12 +29,12 @@ public class Viewer
     /// <summary>
     /// 最小比例
     /// </summary>
-    private float _minZoom = 0.01f;
+    private const float MinZoom = 0.01f;
 
     /// <summary>
     /// 最大比例
     /// </summary>
-    private float _maxZoom = 100;
+    private const float MaxZoom = 100;
 
     /// <summary>
     /// 鼠标中键按下
@@ -130,10 +130,10 @@ public class Viewer
         int tZeroY;
         if (e.Delta > 0)
         {
-            if (Zoom == _maxZoom) return;
+            if (Zoom == MaxZoom) return;
 
             Zoom *= 1.25f;
-            if (Zoom > _maxZoom) Zoom = _maxZoom;
+            if (Zoom > MaxZoom) Zoom = MaxZoom;
 
             // 鼠标滚轮缩放指定地方不是用Zero点缩放
             tZeroX = (int)((e.X - Zero.X) - (e.X - Zero.X) * 1.25f);
@@ -141,10 +141,10 @@ public class Viewer
         }
         else
         {
-            if (Zoom == _minZoom) return;
+            if (Zoom == MinZoom) return;
 
             Zoom *= 0.8f;
-            if (Zoom < _minZoom) Zoom = _minZoom;
+            if (Zoom < MinZoom) Zoom = MinZoom;
 
             // 鼠标滚轮缩放指定地方不是用Zero点缩放
             tZeroX = (int)((e.X - Zero.X) - (e.X - Zero.X) * 0.8f);

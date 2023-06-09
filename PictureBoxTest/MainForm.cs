@@ -12,7 +12,15 @@ namespace PictureBoxTest
 
         private Viewer _viewer;
 
-        private Point _ptMouseDown = Point.Empty;
+        /// <summary>
+        /// AOI截图区域移动的起始点
+        /// </summary>
+        private Point _aoiMoveStartPoint = Point.Empty;
+
+        /// <summary>
+        /// 用来绘制的AOI截图矩形区域
+        /// </summary>
+        private Rectangle _aoiRect = new(0, 0, 950, 950);
 
         public MainForm()
         {
@@ -49,7 +57,7 @@ namespace PictureBoxTest
         {
             _viewer.MouseDown(e);
             if (e.Button == MouseButtons.Right)
-                _ptMouseDown = _viewer.MousePointToLocal(e.Location);
+                _aoiMoveStartPoint = _viewer.MousePointToLocal(e.Location); // 鼠标坐标点变换到显示坐标点
 
             pictureBox.Refresh();
         }
@@ -58,14 +66,22 @@ namespace PictureBoxTest
         {
             _viewer.MouseMove(e);
             if (e.Button == MouseButtons.Right)
-                _ptMouseDown = _viewer.MousePointToLocal(e.Location);
+                if (_aoiRect.Contains(_aoiMoveStartPoint))
+                {
+                    var endMove = _viewer.MousePointToLocal(e.Location);
+                    var xMove = endMove.X - _aoiMoveStartPoint.X;
+                    var yMove = endMove.Y - _aoiMoveStartPoint.Y;
+                    _aoiRect.Offset(xMove, yMove);
+                    _aoiMoveStartPoint = endMove;
+                }
 
             pictureBox.Refresh();
         }
 
         private void PictureBoxOnPaint(object? sender, PaintEventArgs e)
         {
-            var localToShow = _viewer.LocalToShow(new Rectangle(_ptMouseDown.X, _ptMouseDown.Y, 950, 950));
+            //  本地（图纸）矩形变换到显示矩形
+            var localToShow = _viewer.LocalToShow(_aoiRect);
 
             // destRect: Rectangle 结构，它指定所绘制图像的位置和大小(相对于绘制区域只显示这么大, 类似于截图)
             // srcRect: Rectangle 结构，它指定 image 对象中要绘制的部分, 因为缩放了: 所以viewer.Viewport变大/变小了: 所以图片可以显示了且缩放
@@ -77,15 +93,14 @@ namespace PictureBoxTest
 
         private void ButtonOnClick(object sender, EventArgs e)
         {
-            var rect = new Rectangle(_ptMouseDown.X, _ptMouseDown.Y, 950, 950);
-            if (new Rectangle(0, 0, Bitmap.Width, Bitmap.Height).Contains(rect) == false)
+            if (new Rectangle(0, 0, Bitmap.Width, Bitmap.Height).Contains(_aoiRect) == false)
             {
                 MessageBox.Show("超过图片范围");
                 return;
             }
 
-            using var sub = Image.GetSubRect(rect);
-            sub.Save(@$"C:\Users\ASUS\Desktop\{Guid.NewGuid()}.jpg");
+            using var sub = Image.GetSubRect(_aoiRect);
+            sub.Save($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}{Guid.NewGuid()}.jpg");
         }
     }
 }
