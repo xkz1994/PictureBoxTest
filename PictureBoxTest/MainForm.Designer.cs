@@ -38,14 +38,14 @@
             pictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pictureBox.Location = new Point(0, 0);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(1271, 781);
+            pictureBox.Size = new Size(1101, 631);
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
             // 
             // button
             // 
             button.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button.Location = new Point(1277, 12);
+            button.Location = new Point(1107, 12);
             button.Name = "button";
             button.Size = new Size(81, 30);
             button.TabIndex = 1;
@@ -57,7 +57,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1370, 785);
+            ClientSize = new Size(1200, 635);
             Controls.Add(button);
             Controls.Add(pictureBox);
             Name = "MainForm";
