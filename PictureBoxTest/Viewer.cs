@@ -5,6 +5,16 @@ namespace PictureBoxTest;
 public class Viewer
 {
     /// <summary>
+    /// 最小比例
+    /// </summary>
+    private const float MinZoom = 0.01f;
+
+    /// <summary>
+    /// 最大比例
+    /// </summary>
+    private const float MaxZoom = 100;
+
+    /// <summary>
     /// 零点坐标（默认为画板中间）
     /// Node: 不能用属性，不然没法使用Offset之类函数
     /// </summary>
@@ -25,16 +35,6 @@ public class Viewer
     /// 画布控件
     /// </summary>
     private readonly PictureBox _canvas;
-
-    /// <summary>
-    /// 最小比例
-    /// </summary>
-    private const float MinZoom = 0.01f;
-
-    /// <summary>
-    /// 最大比例
-    /// </summary>
-    private const float MaxZoom = 100;
 
     /// <summary>
     /// 鼠标中键按下
@@ -157,8 +157,8 @@ public class Viewer
         //调整视口位置
         Viewport.X = (int)((0 - Zero.X) / Zoom);
         Viewport.Y = (int)((0 - Zero.Y) / Zoom);
-        Viewport.Width = (int)((_canvas.Width) / Zoom);
-        Viewport.Height = (int)((_canvas.Height) / Zoom);
+        Viewport.Width = (int)(_canvas.Width / Zoom);
+        Viewport.Height = (int)(_canvas.Height / Zoom);
     }
 
     /// <summary>
