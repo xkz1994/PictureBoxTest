@@ -22,12 +22,43 @@ namespace PictureBoxTest
                 Rect = new Rectangle(0, 0, 950, 950)
             };
             SizeChanged += OnSizeChanged;
+            KeyPreview = true; // 开启键盘事件的预览: 获取或设置一个值，该值指示在将键事件传递到具有焦点的控件前，窗体是否将接收此键事件
+            KeyDown += OnKeyDown;
 
             pictureBox.Paint += PictureBoxOnPaint;
             pictureBox.MouseMove += PictureBoxOnMouseMove;
             pictureBox.MouseDown += PictureBoxOnMouseDown;
             pictureBox.MouseUp += PictureBoxOnMouseUp;
             pictureBox.MouseWheel += PictureBoxOnMouseWheel;
+
+            textBoxWidth.KeyDown += TextBoxWidthOnKeyDown;
+            textBoxHeight.KeyDown += TextBoxHeightOnKeyDown;
+        }
+
+        private void TextBoxHeightOnKeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter) return;
+            if (int.TryParse(textBoxHeight.Text, out var height) == false)
+            {
+                MessageBox.Show("请输入数字");
+                return;
+            }
+
+            _roiElement.Rect.Height = height;
+            pictureBox.Refresh();
+        }
+
+        private void TextBoxWidthOnKeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter) return;
+            if (int.TryParse(textBoxWidth.Text, out var width) == false)
+            {
+                MessageBox.Show("请输入数字");
+                return;
+            }
+
+            _roiElement.Rect.Width = width;
+            pictureBox.Refresh();
         }
 
         private void OnSizeChanged(object? sender, EventArgs e)
@@ -37,6 +68,12 @@ namespace PictureBoxTest
             {
                 Rect = new Rectangle(0, 0, 950, 950)
             };
+            pictureBox.Refresh();
+        }
+
+        private void OnKeyDown(object? sender, KeyEventArgs e)
+        {
+            _roiElement.KeyDown(e);
             pictureBox.Refresh();
         }
 

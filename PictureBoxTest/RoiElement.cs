@@ -2,6 +2,8 @@
 
 public class RoiElement
 {
+    private static readonly Pen Pen = new(Color.Red, 1);
+
     /// <summary>
     /// 当前对象的区域范围, 用来绘制的矩形区域
     /// 不能用属性，因为属性不能给修改内部值
@@ -220,6 +222,28 @@ public class RoiElement
     {
     }
 
+    public void KeyDown(KeyEventArgs e)
+    {
+        switch (e.KeyCode)
+        {
+            case Keys.Right:
+                Rect.X++;
+                break;
+
+            case Keys.Left:
+                Rect.X--;
+                break;
+
+            case Keys.Up:
+                Rect.Y--;
+                break;
+
+            case Keys.Down:
+                Rect.Y++;
+                break;
+        }
+    }
+
     /// <summary>
     /// 正常绘图画红框十字架
     /// </summary>
@@ -229,9 +253,10 @@ public class RoiElement
         // 本地（图纸）矩形变换到显示矩形
         var localToShow = Viewer.LocalToShow(Rect);
 
-        g.DrawRectangle(Pens.Red, localToShow);
-        g.DrawLine(Pens.Red, localToShow.X + localToShow.Width / 2, localToShow.Y, localToShow.X + localToShow.Width / 2, localToShow.Y + localToShow.Height);
-        g.DrawLine(Pens.Red, localToShow.X, localToShow.Y + localToShow.Height / 2, localToShow.X + localToShow.Width, localToShow.Y + localToShow.Height / 2);
+        Pen.Width = IsSelected ? 2 : 1;
+        g.DrawRectangle(Pen, localToShow);
+        g.DrawLine(Pen, localToShow.X + localToShow.Width / 2, localToShow.Y, localToShow.X + localToShow.Width / 2, localToShow.Y + localToShow.Height);
+        g.DrawLine(Pen, localToShow.X, localToShow.Y + localToShow.Height / 2, localToShow.X + localToShow.Width, localToShow.Y + localToShow.Height / 2);
         DrawingJoystick(g);
     }
 
@@ -243,18 +268,19 @@ public class RoiElement
     {
         if (IsSelected == false) return;
 
+        Pen.Width = 2;
         var cX = Rect.Width / 2;
         var cY = Rect.Height / 2;
         var s = JoystickSize;
         // 画边框矩形
-        g.DrawRectangle(Pens.Red, Viewer.LocalToShow(Rect.X, Rect.Y, s, s));
-        g.DrawRectangle(Pens.Red, Viewer.LocalToShow(Rect.X + (cX - s / 2), Rect.Y, s, s));
-        g.DrawRectangle(Pens.Red, Viewer.LocalToShow(Rect.X + (Rect.Width - s), Rect.Y, s, s));
-        g.DrawRectangle(Pens.Red, Viewer.LocalToShow(Rect.X + (Rect.Width - s), Rect.Y + (cY - s / 2), s, s));
-        g.DrawRectangle(Pens.Red, Viewer.LocalToShow(Rect.X + (Rect.Width - s), Rect.Y + (Rect.Height - s), s, s));
-        g.DrawRectangle(Pens.Red, Viewer.LocalToShow(Rect.X + (cX - s / 2), Rect.Y + (Rect.Height - s), s, s));
-        g.DrawRectangle(Pens.Red, Viewer.LocalToShow(Rect.X, Rect.Y + (Rect.Height - s), s, s));
-        g.DrawRectangle(Pens.Red, Viewer.LocalToShow(Rect.X, Rect.Y + (cY - s / 2), s, s));
+        g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X, Rect.Y, s, s));
+        g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X + (cX - s / 2), Rect.Y, s, s));
+        g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X + (Rect.Width - s), Rect.Y, s, s));
+        g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X + (Rect.Width - s), Rect.Y + (cY - s / 2), s, s));
+        g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X + (Rect.Width - s), Rect.Y + (Rect.Height - s), s, s));
+        g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X + (cX - s / 2), Rect.Y + (Rect.Height - s), s, s));
+        g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X, Rect.Y + (Rect.Height - s), s, s));
+        g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X, Rect.Y + (cY - s / 2), s, s));
     }
 }
 

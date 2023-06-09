@@ -30,6 +30,8 @@
         {
             pictureBox = new PictureBox();
             button = new Button();
+            textBoxWidth = new TextBox();
+            textBoxHeight = new TextBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             SuspendLayout();
             // 
@@ -53,22 +55,45 @@
             button.UseVisualStyleBackColor = true;
             button.Click += ButtonOnClick;
             // 
+            // textBoxWidth
+            // 
+            textBoxWidth.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxWidth.Location = new Point(1107, 60);
+            textBoxWidth.Name = "textBoxWidth";
+            textBoxWidth.Size = new Size(81, 23);
+            textBoxWidth.TabIndex = 2;
+            textBoxWidth.Text = "950";
+            // 
+            // textBoxHeight
+            // 
+            textBoxHeight.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBoxHeight.Location = new Point(1107, 98);
+            textBoxHeight.Name = "textBoxHeight";
+            textBoxHeight.Size = new Size(81, 23);
+            textBoxHeight.TabIndex = 3;
+            textBoxHeight.Text = "950";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1200, 635);
+            Controls.Add(textBoxHeight);
+            Controls.Add(textBoxWidth);
             Controls.Add(button);
             Controls.Add(pictureBox);
             Name = "MainForm";
             Text = "MainForm";
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private PictureBox pictureBox;
         private Button button;
+        private TextBox textBoxWidth;
+        private TextBox textBoxHeight;
     }
 }
