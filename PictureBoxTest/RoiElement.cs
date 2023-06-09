@@ -18,7 +18,7 @@ public class RoiElement
     /// <summary>
     /// 画布控件
     /// </summary>
-    public readonly PictureBox Canvas;
+    public readonly Canvas Canvas;
 
     /// <summary>
     /// 是否是选中 默认false
@@ -45,9 +45,9 @@ public class RoiElement
     /// </summary>
     private TransformState _transformState = TransformState.None;
 
-    public RoiElement(Viewer viewer, PictureBox canvas)
+    public RoiElement(Canvas canvas)
     {
-        Viewer = viewer;
+        Viewer = canvas.Viewer;
         Canvas = canvas;
     }
 

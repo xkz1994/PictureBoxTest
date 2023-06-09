@@ -34,7 +34,7 @@ public class Viewer
     /// <summary>
     /// 画布控件
     /// </summary>
-    private readonly PictureBox _canvas;
+    private readonly Canvas _canvas;
 
     /// <summary>
     /// 鼠标中键按下
@@ -50,7 +50,7 @@ public class Viewer
     /// 构造函数
     /// </summary>
     /// <param name="canvas">画布控件</param>
-    public Viewer(PictureBox canvas)
+    public Viewer(Canvas canvas)
     {
         _canvas = canvas;
 
@@ -64,7 +64,7 @@ public class Viewer
     /// </summary>
     /// <param name="canvas">画布控件</param>
     /// <param name="zero">零点</param>
-    public Viewer(PictureBox canvas, Point zero)
+    public Viewer(Canvas canvas, Point zero)
     {
         _canvas = canvas;
 

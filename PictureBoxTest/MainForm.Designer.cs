@@ -28,11 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            pictureBox = new PictureBox();
+            pictureBox = new Canvas();
             button = new Button();
             textBoxWidth = new TextBox();
             textBoxHeight = new TextBox();
-            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             SuspendLayout();
             // 
             // pictureBox
@@ -84,14 +83,13 @@
             Controls.Add(pictureBox);
             Name = "MainForm";
             Text = "MainForm";
-            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private PictureBox pictureBox;
+        private Canvas pictureBox;
         private Button button;
         private TextBox textBoxWidth;
         private TextBox textBoxHeight;
