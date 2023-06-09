@@ -70,8 +70,8 @@ namespace PictureBoxTest
 
         private void PictureBoxOnPaint(object? sender, PaintEventArgs e)
         {
-            // destRect: Rectangle ½á¹¹£¬ËüÖ¸¶¨Ëù»æÖÆÍ¼ÏñµÄÎ»ÖÃºÍ´óĞ¡(Ïà¶ÔÓÚ»æÖÆÇøÓòÖ»ÏÔÊ¾ÕâÃ´´ó, ÀàËÆÓÚ½ØÍ¼)
-            // srcRect: Rectangle ½á¹¹£¬ËüÖ¸¶¨ image ¶ÔÏóÖĞÒª»æÖÆµÄ²¿·Ö, ÒòÎªËõ·ÅÁË: ËùÒÔviewer.Viewport±ä´ó/±äĞ¡ÁË: ËùÒÔÍ¼Æ¬¿ÉÒÔÏÔÊ¾ÁËÇÒËõ·Å
+            // destRect: Rectangle ç»“æ„ï¼Œå®ƒæŒ‡å®šæ‰€ç»˜åˆ¶å›¾åƒçš„ä½ç½®å’Œå¤§å°(ç›¸å¯¹äºç»˜åˆ¶åŒºåŸŸåªæ˜¾ç¤ºè¿™ä¹ˆå¤§, ç±»ä¼¼äºæˆªå›¾)
+            // srcRect: Rectangle ç»“æ„ï¼Œå®ƒæŒ‡å®š image å¯¹è±¡ä¸­è¦ç»˜åˆ¶çš„éƒ¨åˆ†, å› ä¸ºç¼©æ”¾äº†: æ‰€ä»¥viewer.Viewportå˜å¤§/å˜å°äº†: æ‰€ä»¥å›¾ç‰‡å¯ä»¥æ˜¾ç¤ºäº†ä¸”ç¼©æ”¾
             e.Graphics.DrawImage(Bitmap, new Rectangle(0, 0, pictureBox.Width, pictureBox.Height), _viewer.Viewport, GraphicsUnit.Pixel);
             _roiElement.Drawing(e.Graphics);
         }
@@ -80,12 +80,12 @@ namespace PictureBoxTest
         {
             if (new Rectangle(0, 0, Bitmap.Width, Bitmap.Height).Contains(_roiElement.Rect) == false)
             {
-                MessageBox.Show("³¬¹ıÍ¼Æ¬·¶Î§");
+                MessageBox.Show("è¶…è¿‡å›¾ç‰‡èŒƒå›´");
                 return;
             }
 
             using var sub = Image.GetSubRect(_roiElement.Rect);
-            sub.Save($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}{Guid.NewGuid()}.jpg");
+            sub.Save($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{Guid.NewGuid()}.jpg");
         }
     }
 }

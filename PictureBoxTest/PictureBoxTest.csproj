@@ -15,9 +15,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="origin.jpg">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<None Update="origin.jpg">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>
