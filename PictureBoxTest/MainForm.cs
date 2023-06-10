@@ -1,62 +1,75 @@
 // ReSharper disable LocalizableElement
 
+using Emgu.CV;
+using Emgu.CV.Structure;
+
 namespace PictureBoxTest
 {
     public partial class MainForm : Form
     {
+        public static readonly Image<Bgr, byte> Image = new("origin.jpg");
+
         public MainForm()
         {
             InitializeComponent();
 
             KeyPreview = true; // 开启键盘事件的预览: 获取或设置一个值，该值指示在将键事件传递到具有焦点的控件前，窗体是否将接收此键事件
             KeyDown += OnKeyDown;
+            Load += OnLoad;
 
-            textBoxWidth.KeyDown += TextBoxWidthOnKeyDown;
-            textBoxHeight.KeyDown += TextBoxHeightOnKeyDown;
-        }
+            var binding = new Binding(nameof(textBoxWidth.Text), imageCanvas.RoiElement, nameof(imageCanvas.RoiElement.Weight), true, DataSourceUpdateMode.OnPropertyChanged);
+            binding.Format += ObjectToString;
+            binding.Parse += StringToInt;
+            textBoxWidth.DataBindings.Add(binding);
 
-        private void TextBoxHeightOnKeyDown(object? sender, KeyEventArgs e)
-        {
-            if (e.KeyCode != Keys.Enter) return;
-            if (int.TryParse(textBoxHeight.Text, out var height) == false)
-            {
-                MessageBox.Show("请输入数字");
-                return;
-            }
-
-            pictureBox.RoiElement.Rect.Height = height;
-            pictureBox.Refresh();
-        }
-
-        private void TextBoxWidthOnKeyDown(object? sender, KeyEventArgs e)
-        {
-            if (e.KeyCode != Keys.Enter) return;
-            if (int.TryParse(textBoxWidth.Text, out var width) == false)
-            {
-                MessageBox.Show("请输入数字");
-                return;
-            }
-
-            pictureBox.RoiElement.Rect.Width = width;
-            pictureBox.Refresh();
+            binding = new Binding(nameof(textBoxHeight.Text), imageCanvas.RoiElement, nameof(imageCanvas.RoiElement.Height), true, DataSourceUpdateMode.OnPropertyChanged);
+            binding.Format += ObjectToString;
+            binding.Parse += StringToInt;
+            textBoxHeight.DataBindings.Add(binding);
         }
 
         private void OnKeyDown(object? sender, KeyEventArgs e)
         {
-            pictureBox.RoiElement.KeyDown(e);
-            pictureBox.Refresh();
+            imageCanvas.ImageCanvasOnKeyDown(e);
+            imageCanvas.Refresh();
+        }
+
+        private void OnLoad(object? sender, EventArgs e)
+        {
+            imageCanvas.Bitmap = Image.ToBitmap();
+            imageCanvas.Refresh();
         }
 
         private void ButtonOnClick(object sender, EventArgs e)
         {
-            if (new Rectangle(0, 0, Canvas.Bitmap.Width, Canvas.Bitmap.Height).Contains(pictureBox.RoiElement.Rect) == false)
+            if (new Rectangle(0, 0, Image.Width, Image.Height).Contains(imageCanvas.RoiElement.Rect) == false)
             {
                 MessageBox.Show("超过图片范围");
                 return;
             }
 
-            using var sub = Canvas.Image.GetSubRect(pictureBox.RoiElement.Rect);
+            using var sub = Image.GetSubRect(imageCanvas.RoiElement.Rect);
             sub.Save($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{Guid.NewGuid()}.jpg");
+        }
+
+        /// <summary>
+        /// float to string
+        /// </summary>
+        public static void ObjectToString(object? sender, ConvertEventArgs convertEventArgs)
+        {
+            if (convertEventArgs.DesiredType != typeof(string)) return;
+
+            convertEventArgs.Value = convertEventArgs.Value is null ? string.Empty : convertEventArgs.Value.ToString();
+        }
+
+        /// <summary>
+        /// string to float
+        /// </summary>
+        public static void StringToInt(object? sender, ConvertEventArgs convertEventArgs)
+        {
+            if (convertEventArgs.DesiredType != typeof(int)) return;
+
+            convertEventArgs.Value = int.TryParse(convertEventArgs.Value?.ToString(), out var result) ? result : 500;
         }
     }
 }

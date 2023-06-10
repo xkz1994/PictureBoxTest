@@ -34,7 +34,7 @@ public class Viewer
     /// <summary>
     /// 画布控件
     /// </summary>
-    private readonly Canvas _canvas;
+    private readonly ImageCanvas _imageCanvas;
 
     /// <summary>
     /// 鼠标中键按下
@@ -49,28 +49,28 @@ public class Viewer
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="canvas">画布控件</param>
-    public Viewer(Canvas canvas)
+    /// <param name="imageCanvas">画布控件</param>
+    public Viewer(ImageCanvas imageCanvas)
     {
-        _canvas = canvas;
+        _imageCanvas = imageCanvas;
 
         //默认图纸坐标
-        Zero = new Point(_canvas.Width / 2, _canvas.Height / 2);
-        Viewport = new Rectangle(0 - Zero.X, 0 - Zero.Y, _canvas.Width, _canvas.Height);
+        Zero = new Point(_imageCanvas.Width / 2, _imageCanvas.Height / 2);
+        Viewport = new Rectangle(0 - Zero.X, 0 - Zero.Y, _imageCanvas.Width, _imageCanvas.Height);
     }
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="canvas">画布控件</param>
+    /// <param name="imageCanvas">画布控件</param>
     /// <param name="zero">零点</param>
-    public Viewer(Canvas canvas, Point zero)
+    public Viewer(ImageCanvas imageCanvas, Point zero)
     {
-        _canvas = canvas;
+        _imageCanvas = imageCanvas;
 
         //默认图纸坐标
         Zero = zero;
-        Viewport = new Rectangle(0 - Zero.X, 0 - Zero.Y, _canvas.Width, _canvas.Height);
+        Viewport = new Rectangle(0 - Zero.X, 0 - Zero.Y, _imageCanvas.Width, _imageCanvas.Height);
     }
 
     #region 视图调整
@@ -157,8 +157,8 @@ public class Viewer
         //调整视口位置
         Viewport.X = (int)((0 - Zero.X) / Zoom);
         Viewport.Y = (int)((0 - Zero.Y) / Zoom);
-        Viewport.Width = (int)(_canvas.Width / Zoom);
-        Viewport.Height = (int)(_canvas.Height / Zoom);
+        Viewport.Width = (int)(_imageCanvas.Width / Zoom);
+        Viewport.Height = (int)(_imageCanvas.Height / Zoom);
     }
 
     /// <summary>
@@ -168,7 +168,7 @@ public class Viewer
     public void SetZoom(float zoom)
     {
         Zoom = zoom;
-        _canvas.Refresh();
+        _imageCanvas.Refresh();
     }
 
     /// <summary>
@@ -183,6 +183,17 @@ public class Viewer
         //调整视口位置
         Viewport.X = (int)((0 - Zero.X) / Zoom);
         Viewport.Y = (int)((0 - Zero.Y) / Zoom);
+    }
+
+    /// <summary>
+    /// 更新视窗
+    /// </summary>
+    public void UpdateViewport()
+    {
+        Viewport.X = (int)((0 - Zero.X) / Zoom);
+        Viewport.Y = (int)((0 - Zero.Y) / Zoom);
+        Viewport.Width = (int)(_imageCanvas.Width / Zoom);
+        Viewport.Height = (int)(_imageCanvas.Height / Zoom);
     }
 
     #endregion 视图调整

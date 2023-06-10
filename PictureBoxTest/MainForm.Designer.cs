@@ -28,20 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            pictureBox = new Canvas();
+            imageCanvas = new ImageCanvas();
             button = new Button();
             textBoxWidth = new TextBox();
             textBoxHeight = new TextBox();
             SuspendLayout();
             // 
-            // pictureBox
+            // imageCanvas
             // 
-            pictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pictureBox.Location = new Point(0, 0);
-            pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(1101, 631);
-            pictureBox.TabIndex = 0;
-            pictureBox.TabStop = false;
+            imageCanvas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            imageCanvas.Bitmap = null;
+            imageCanvas.IsShowRoi = true;
+            imageCanvas.Location = new Point(0, 0);
+            imageCanvas.Name = "imageCanvas";
+            imageCanvas.Size = new Size(1101, 631);
+            imageCanvas.TabIndex = 0;
+            imageCanvas.TabStop = false;
             // 
             // button
             // 
@@ -80,7 +82,7 @@
             Controls.Add(textBoxHeight);
             Controls.Add(textBoxWidth);
             Controls.Add(button);
-            Controls.Add(pictureBox);
+            Controls.Add(imageCanvas);
             Name = "MainForm";
             Text = "MainForm";
             ResumeLayout(false);
@@ -89,7 +91,7 @@
 
         #endregion
 
-        private Canvas pictureBox;
+        private ImageCanvas imageCanvas;
         private Button button;
         private TextBox textBoxWidth;
         private TextBox textBoxHeight;

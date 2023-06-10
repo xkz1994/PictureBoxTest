@@ -1,7 +1,11 @@
-﻿namespace PictureBoxTest;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-public class RoiElement
+namespace PictureBoxTest;
+
+public class RoiElement : INotifyPropertyChanged
 {
+    public static SynchronizationContext? SynchronizationContext;
     private static readonly Pen Pen = new(Color.Red, 1);
 
     /// <summary>
@@ -18,12 +22,36 @@ public class RoiElement
     /// <summary>
     /// 画布控件
     /// </summary>
-    public readonly Canvas Canvas;
+    public readonly ImageCanvas ImageCanvas;
 
     /// <summary>
     /// 是否是选中 默认false
     /// </summary>
     public bool IsSelected { get; private set; }
+
+    public int Weight
+    {
+        get => Rect.Width;
+        set
+        {
+            if (value == Rect.Width) return;
+            Rect.Width = value;
+            ImageCanvas.Refresh();
+            OnPropertyChanged();
+        }
+    }
+
+    public int Height
+    {
+        get => Rect.Height;
+        set
+        {
+            if (value == Rect.Height) return;
+            Rect.Height = value;
+            ImageCanvas.Refresh();
+            OnPropertyChanged();
+        }
+    }
 
     /// <summary>
     /// 八个操纵柄尺寸
@@ -45,10 +73,11 @@ public class RoiElement
     /// </summary>
     private TransformState _transformState = TransformState.None;
 
-    public RoiElement(Canvas canvas)
+    public RoiElement(ImageCanvas imageCanvas)
     {
-        Viewer = canvas.Viewer;
-        Canvas = canvas;
+        Viewer = imageCanvas.Viewer;
+        ImageCanvas = imageCanvas;
+        SynchronizationContext = SynchronizationContext.Current;
     }
 
     public void MouseDown(MouseEventArgs e)
@@ -90,59 +119,61 @@ public class RoiElement
         {
             _editorState = EditorState.Transform;
             _transformState = TransformState.LeftTop;
-            Canvas.Cursor = Cursors.SizeNWSE;
+            ImageCanvas.Cursor = Cursors.SizeNWSE;
         }
         else if (middleOfLeftAndRightJoystickLeftBoardResult && middleOfLeftAndRightJoystickRightBoardResult && topJoystickTopBoardResult && topJoystickBottomBoardResult)
         {
             _editorState = EditorState.Transform;
             _transformState = TransformState.Top;
-            Canvas.Cursor = Cursors.SizeNS;
+            ImageCanvas.Cursor = Cursors.SizeNS;
         }
         else if (rightJoystickLeftBoardResult && rightJoystickRightBoardResult && topJoystickTopBoardResult && topJoystickBottomBoardResult)
         {
             _editorState = EditorState.Transform;
             _transformState = TransformState.RightTop;
-            Canvas.Cursor = Cursors.SizeNESW;
+            ImageCanvas.Cursor = Cursors.SizeNESW;
         }
         else if (rightJoystickLeftBoardResult && rightJoystickRightBoardResult && middleOfTopAndBottomJoystickTopBoardResult && middleOfTopAndBottomJoystickBottomBoardResult)
         {
             _editorState = EditorState.Transform;
             _transformState = TransformState.Right;
-            Canvas.Cursor = Cursors.SizeWE;
+            ImageCanvas.Cursor = Cursors.SizeWE;
         }
         else if (rightJoystickLeftBoardResult && rightJoystickRightBoardResult && bottomJoystickTopBoardResult && bottomJoystickBottomBoardResult)
         {
             _editorState = EditorState.Transform;
             _transformState = TransformState.RightBottom;
-            Canvas.Cursor = Cursors.SizeNWSE;
+            ImageCanvas.Cursor = Cursors.SizeNWSE;
         }
         else if (middleOfLeftAndRightJoystickLeftBoardResult && middleOfLeftAndRightJoystickRightBoardResult && bottomJoystickTopBoardResult && bottomJoystickBottomBoardResult)
         {
             _editorState = EditorState.Transform;
             _transformState = TransformState.Bottom;
-            Canvas.Cursor = Cursors.SizeNS;
+            ImageCanvas.Cursor = Cursors.SizeNS;
         }
         else if (leftJoystickLeftBoardResult && leftJoystickRightBoardResult && bottomJoystickTopBoardResult && bottomJoystickBottomBoardResult)
         {
             _editorState = EditorState.Transform;
             _transformState = TransformState.LeftBottom;
-            Canvas.Cursor = Cursors.SizeNESW;
+            ImageCanvas.Cursor = Cursors.SizeNESW;
         }
         else if (leftJoystickLeftBoardResult && leftJoystickRightBoardResult && middleOfTopAndBottomJoystickTopBoardResult && middleOfTopAndBottomJoystickBottomBoardResult)
         {
             _editorState = EditorState.Transform;
             _transformState = TransformState.Left;
-            Canvas.Cursor = Cursors.SizeWE;
+            ImageCanvas.Cursor = Cursors.SizeWE;
         }
         else
         {
             _editorState = EditorState.Move;
-            Canvas.Cursor = Cursors.SizeAll;
+            ImageCanvas.Cursor = Cursors.SizeAll;
         }
     }
 
     public void MouseMove(MouseEventArgs e)
     {
+        if (_editorState is EditorState.None) return;
+
         switch (_editorState)
         {
             case EditorState.Move: //移动模式，设定对象位置
@@ -210,12 +241,16 @@ public class RoiElement
                 _aoiMoveStartPoint = endTransform;
                 break;
         }
+
+        if (_editorState is not EditorState.Transform) return;
+        OnPropertyChanged(nameof(Weight));
+        OnPropertyChanged(nameof(Height));
     }
 
     public void MouseUp(MouseEventArgs e)
     {
         _editorState = EditorState.None;
-        Canvas.Cursor = Cursors.Hand;
+        ImageCanvas.Cursor = Cursors.Hand;
     }
 
     public void MouseWheel(MouseEventArgs e)
@@ -281,6 +316,23 @@ public class RoiElement
         g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X + (cX - s / 2), Rect.Y + (Rect.Height - s), s, s));
         g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X, Rect.Y + (Rect.Height - s), s, s));
         g.DrawRectangle(Pen, Viewer.LocalToShow(Rect.X, Rect.Y + (cY - s / 2), s, s));
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        // Send同步 Post异步, 同步效果更快界面不卡
+        SynchronizationContext?.Send(_ => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)), null);
+        // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
     }
 }
 
