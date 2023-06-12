@@ -7,8 +7,6 @@ namespace PictureBoxTest
 {
     public partial class MainForm : Form
     {
-        public static readonly Image<Bgr, byte> Image = new("origin.jpg");
-
         public MainForm()
         {
             InitializeComponent();
@@ -36,20 +34,23 @@ namespace PictureBoxTest
 
         private void OnLoad(object? sender, EventArgs e)
         {
-            imageCanvas.Bitmap = Image.ToBitmap();
-            imageCanvas.Refresh();
+            // imageCanvas.Image = Image.ToBitmap();
+            // imageCanvas.Refresh();
         }
 
         private void ButtonOnClick(object sender, EventArgs e)
         {
-            if (new Rectangle(0, 0, Image.Width, Image.Height).Contains(imageCanvas.RoiElement.Rect) == false)
+            if (imageCanvas.Image is not Bitmap bitmap) return;
+            if (new Rectangle(0, 0, bitmap.Width, bitmap.Height).Contains(imageCanvas.RoiElement.Rect) == false)
             {
                 MessageBox.Show("超过图片范围");
                 return;
             }
 
-            using var sub = Image.GetSubRect(imageCanvas.RoiElement.Rect);
+            using var image = bitmap.ToImage<Bgr, byte>();
+            using var sub = image.GetSubRect(imageCanvas.RoiElement.Rect);
             sub.Save($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{Guid.NewGuid()}.jpg");
+            MessageBox.Show("保存成功");
         }
 
         /// <summary>

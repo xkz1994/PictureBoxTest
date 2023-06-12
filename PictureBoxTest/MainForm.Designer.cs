@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             imageCanvas = new ImageCanvas();
             button = new Button();
             textBoxWidth = new TextBox();
@@ -37,7 +38,7 @@
             // imageCanvas
             // 
             imageCanvas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            imageCanvas.Bitmap = null;
+            imageCanvas.Image = (Image)resources.GetObject("imageCanvas.Image");
             imageCanvas.IsShowRoi = true;
             imageCanvas.Location = new Point(0, 0);
             imageCanvas.Name = "imageCanvas";

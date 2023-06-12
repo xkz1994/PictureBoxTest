@@ -2,11 +2,15 @@
 
 namespace PictureBoxTest;
 
+[ToolboxItem(true)]
+[DefaultProperty(nameof(Image))]
+[Description("ROI区域与图片动态显示")]
 public class ImageCanvas : Control
 {
     [Category("自定义")]
     [Description("图片")]
-    public Bitmap? Bitmap { get; set; }
+    [DefaultValue(typeof(Bitmap), null)]
+    public Image? Image { get; set; }
 
     [Category("自定义")]
     [Description("是否显示ROI")]
@@ -79,9 +83,9 @@ public class ImageCanvas : Control
     {
         // destRect: Rectangle 结构，它指定所绘制图像的位置和大小(相对于绘制区域只显示这么大, 类似于截图)
         // srcRect: Rectangle 结构，它指定 image 对象中要绘制的部分, 因为缩放了: 所以viewer.Viewport变大/变小了: 所以图片可以显示了且缩放
-        if (Bitmap is null) return;
+        if (Image is null) return;
 
-        e.Graphics.DrawImage(Bitmap, new Rectangle(0, 0, Width, Height), Viewer.Viewport, GraphicsUnit.Pixel);
+        e.Graphics.DrawImage(Image, new Rectangle(0, 0, Width, Height), Viewer.Viewport, GraphicsUnit.Pixel);
 
         if (IsShowRoi)
             RoiElement.Drawing(e.Graphics);
