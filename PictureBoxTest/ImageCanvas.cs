@@ -21,6 +21,12 @@ public class ImageCanvas : Control
 
     public ImageCanvas()
     {
+        SetStyle(ControlStyles.UserPaint, true);
+        SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+        SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+        DoubleBuffered = true;
+        AllowDrop = true;
+
         IsShowRoi = true;
         Viewer = new Viewer(this, new Point(0, 0));
         RoiElement = new RoiElement(this)
@@ -34,10 +40,6 @@ public class ImageCanvas : Control
         MouseDown += ImageCanvasOnMouseDown;
         MouseUp += ImageCanvasOnMouseUp;
         MouseWheel += ImageCanvasOnMouseWheel;
-
-        SetStyle(ControlStyles.UserPaint, true);
-        SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-        SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
     }
 
     private void ImageCanvasOnSizeChanged(object? sender, EventArgs e)
@@ -76,7 +78,11 @@ public class ImageCanvas : Control
         Viewer.MouseMove(e);
         if (IsShowRoi)
             RoiElement.MouseMove(e);
-        Refresh();
+        if (e.Button != MouseButtons.None)
+        {
+            //TODO: 增加了刷新条件，尝试减少刷新来优化系统性
+            Refresh();
+        }
     }
 
     private void ImageCanvasOnPaint(object? sender, PaintEventArgs e)
