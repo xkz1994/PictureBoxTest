@@ -168,6 +168,10 @@ public class Viewer
     public void SetZoom(float zoom)
     {
         Zoom = zoom;
+        Viewport.X = (int)((0 - Zero.X) / Zoom);
+        Viewport.Y = (int)((0 - Zero.Y) / Zoom);
+        Viewport.Width = (int)(_imageCanvas.Width / Zoom);
+        Viewport.Height = (int)(_imageCanvas.Height / Zoom);
         _imageCanvas.Refresh();
     }
 

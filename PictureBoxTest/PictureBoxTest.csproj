@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="origin.jpg">
+		<None Update="origin.bmp">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
