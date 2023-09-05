@@ -38,8 +38,6 @@
             // imageCanvas
             // 
             imageCanvas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            imageCanvas.Image = (Image)resources.GetObject("imageCanvas.Image");
-            imageCanvas.IsShowRoi = true;
             imageCanvas.Location = new Point(0, 0);
             imageCanvas.Name = "imageCanvas";
             imageCanvas.Size = new Size(1101, 631);
