@@ -15,6 +15,10 @@ namespace PictureBoxTest
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            if (LoadDxf("dxf\\1.dxf"))
+            {
+                MessageBox.Show("Ok");
+            }
         }
 
         private bool LoadDxf(string filename)

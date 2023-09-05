@@ -35,7 +35,6 @@
             // 
             imageCanvas.AllowDrop = true;
             imageCanvas.Dock = DockStyle.Fill;
-            imageCanvas.IsShowRoi = true;
             imageCanvas.Location = new Point(0, 0);
             imageCanvas.Name = "imageCanvas";
             imageCanvas.Size = new Size(1200, 635);
