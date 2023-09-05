@@ -1,35 +1,36 @@
 // ReSharper disable LocalizableElement
 
-using Emgu.CV;
-using Emgu.CV.Structure;
+using DXFLib;
 
 namespace PictureBoxTest
 {
     public partial class MainForm : Form
     {
+        private DXFDocument _doc = null!;
+
         public MainForm()
         {
             InitializeComponent();
-
-            KeyPreview = true; // 开启键盘事件的预览: 获取或设置一个值，该值指示在将键事件传递到具有焦点的控件前，窗体是否将接收此键事件
-            KeyDown += OnKeyDown;
-            Load += OnLoad;
         }
 
-        private void OnKeyDown(object? sender, KeyEventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
-            imageCanvas.ImageCanvasOnKeyDown(e);
-            imageCanvas.Refresh();
         }
 
-        private void OnLoad(object? sender, EventArgs e)
+        private bool LoadDxf(string filename)
         {
-            // imageCanvas.Image = Image.ToBitmap();
-            // imageCanvas.Refresh();
-        }
+            _doc = new DXFDocument();
+            try
+            {
+                _doc.Load(filename);
+                return true;
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("The file could not be opened - perhaps already open in other application?\r\n" + err.ToString());
+            }
 
-        private void ButtonOnClick(object sender, EventArgs e)
-        {
+            return false;
         }
     }
 }
