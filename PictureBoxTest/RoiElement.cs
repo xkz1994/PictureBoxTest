@@ -5,7 +5,7 @@ namespace PictureBoxTest
 {
     public sealed class RoiElement : INotifyPropertyChanged
     {
-        public static SynchronizationContext? SynchronizationContext { get; set; }
+        public static SynchronizationContext SynchronizationContext { get; set; }
 
         private static readonly Pen Pen = new Pen(Color.Red, 1);
 

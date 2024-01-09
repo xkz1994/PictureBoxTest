@@ -41,7 +41,7 @@
             imageCanvas.AllowDrop = true;
             imageCanvas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             imageCanvas.ImageMouseMoveButton = MouseButtons.Middle;
-            imageCanvas.IsFirstZoom = false;
+            imageCanvas.IsAutoZoom = true;
             imageCanvas.IsShowCross = true;
             imageCanvas.IsShowRoi = false;
             imageCanvas.Location = new Point(0, 0);

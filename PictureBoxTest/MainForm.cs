@@ -66,7 +66,7 @@ namespace PictureBoxTest
             if (dialog.ShowDialog() != DialogResult.OK) return;
             imageCanvas.Image = new Bitmap(dialog.FileName);
             imageCanvas.MatchPointList.Clear();
-            imageCanvas.IsFirstZoom = true;
+            imageCanvas.IsAutoZoom = true;
             imageCanvas.Refresh();
         }
 

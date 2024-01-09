@@ -25,6 +25,8 @@ namespace PictureBoxTest
         public static readonly float MatchThreshold = 0.7f;
         public static readonly string MatchTemplatePath = "D:\\mb\\40z.png";
 
+        public readonly List<Point> MatchPointList = new List<Point>();
+
         private Image _image;
 
         [Category("自定义")]
@@ -60,7 +62,7 @@ namespace PictureBoxTest
 
         [Category("自定义")]
         [Description("第一次是否缩放")]
-        public bool IsFirstZoom { get; set; }
+        public bool IsAutoZoom { get; set; }
 
         [Category("自定义")]
         [Description("移动图片按键类型")]
@@ -82,8 +84,6 @@ namespace PictureBoxTest
 
         public RoiElement RoiElement { get; private set; }
 
-        public readonly List<Point> MatchPointList = new List<Point>();
-
         public ImageCanvas()
         {
             SetStyle(ControlStyles.UserPaint, true);
@@ -94,7 +94,7 @@ namespace PictureBoxTest
 
             IsShowRoi = true;
             IsShowCross = false;
-            IsFirstZoom = true;
+            IsAutoZoom = true;
             Viewer = new Viewer(this, new Point(0, 0));
             RoiElement = new RoiElement(this)
             {
@@ -107,6 +107,7 @@ namespace PictureBoxTest
             MouseDown += ImageCanvasOnMouseDown;
             MouseUp += ImageCanvasOnMouseUp;
             MouseWheel += ImageCanvasOnMouseWheel;
+            MouseDoubleClick += ImageCanvasOnMouseDoubleClick;
         }
 
         private void ImageCanvasOnSizeChanged(object sender, EventArgs e)
@@ -152,12 +153,20 @@ namespace PictureBoxTest
             }
         }
 
+        private void ImageCanvasOnMouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Middle) return;
+
+            IsAutoZoom = true;
+            Refresh();
+        }
+
         private void ImageCanvasOnPaint(object sender, PaintEventArgs e)
         {
             // destRect: Rectangle 结构，它指定所绘制图像的位置和大小(相对于绘制区域只显示这么大, 类似于截图)
             // srcRect: Rectangle 结构，它指定 image 对象中要绘制的部分, 因为缩放了: 所以viewer.Viewport变大/变小了: 所以图片可以显示了且缩放
             if (Image is null) return;
-            if (IsFirstZoom)
+            if (IsAutoZoom)
             {
                 var zoomWidth = (float)Width / Image.Width;
                 var zoomHeight = (float)Height / Image.Height;
@@ -168,7 +177,7 @@ namespace PictureBoxTest
                     Viewer.Zero.Offset((int)((Width - Image.Width * zoomHeight) / 2), 0);
                 Viewer.SetZoom(Math.Min(zoomWidth, zoomHeight));
 
-                IsFirstZoom = false;
+                IsAutoZoom = false;
             }
 
             e.Graphics.DrawImage(Image, new Rectangle(0, 0, Width, Height), Viewer.Viewport, GraphicsUnit.Pixel);
