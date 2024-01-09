@@ -28,20 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             imageCanvas = new ImageCanvas();
             button = new Button();
             textBoxWidth = new TextBox();
             textBoxHeight = new TextBox();
+            buttonTest = new Button();
+            buttonPath = new Button();
             SuspendLayout();
             // 
             // imageCanvas
             // 
+            imageCanvas.AllowDrop = true;
             imageCanvas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            imageCanvas.Image = (Image)resources.GetObject("imageCanvas.Image");
-            imageCanvas.IsShowRoi = true;
+            imageCanvas.ImageMouseMoveButton = MouseButtons.Middle;
+            imageCanvas.IsFirstZoom = false;
+            imageCanvas.IsShowCross = true;
+            imageCanvas.IsShowRoi = false;
             imageCanvas.Location = new Point(0, 0);
             imageCanvas.Name = "imageCanvas";
+            imageCanvas.RoiMouseMoveButton = MouseButtons.Right;
             imageCanvas.Size = new Size(1101, 631);
             imageCanvas.TabIndex = 0;
             imageCanvas.TabStop = false;
@@ -60,7 +65,7 @@
             // textBoxWidth
             // 
             textBoxWidth.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxWidth.Location = new Point(1107, 60);
+            textBoxWidth.Location = new Point(1107, 53);
             textBoxWidth.Name = "textBoxWidth";
             textBoxWidth.Size = new Size(81, 23);
             textBoxWidth.TabIndex = 2;
@@ -69,17 +74,41 @@
             // textBoxHeight
             // 
             textBoxHeight.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBoxHeight.Location = new Point(1107, 98);
+            textBoxHeight.Location = new Point(1107, 87);
             textBoxHeight.Name = "textBoxHeight";
             textBoxHeight.Size = new Size(81, 23);
             textBoxHeight.TabIndex = 3;
             textBoxHeight.Text = "950";
+            // 
+            // buttonTest
+            // 
+            buttonTest.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonTest.Location = new Point(1107, 162);
+            buttonTest.Name = "buttonTest";
+            buttonTest.Size = new Size(81, 30);
+            buttonTest.TabIndex = 4;
+            buttonTest.Text = "Test";
+            buttonTest.UseVisualStyleBackColor = true;
+            buttonTest.Click += ButtonTestClick;
+            // 
+            // buttonPath
+            // 
+            buttonPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonPath.Location = new Point(1107, 121);
+            buttonPath.Name = "buttonPath";
+            buttonPath.Size = new Size(81, 30);
+            buttonPath.TabIndex = 5;
+            buttonPath.Text = "Path";
+            buttonPath.UseVisualStyleBackColor = true;
+            buttonPath.Click += ButtonPathClick;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1200, 635);
+            Controls.Add(buttonPath);
+            Controls.Add(buttonTest);
             Controls.Add(textBoxHeight);
             Controls.Add(textBoxWidth);
             Controls.Add(button);
@@ -96,5 +125,7 @@
         private Button button;
         private TextBox textBoxWidth;
         private TextBox textBoxHeight;
+        private Button buttonTest;
+        private Button buttonPath;
     }
 }
